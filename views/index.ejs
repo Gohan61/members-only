@@ -14,5 +14,9 @@
     <% } %>
     <a href="/signup">Sign up</a>
     <a href="/signin">Sign in</a>
+    <% if (user) { %>
+    <!-- <a href="/user/<%= user.id %>/membership">Become a member</a> -->
+    <a href="<%= user.url %>/membership">Become a member</a>
+    <%}%>
   </body>
 </html>

@@ -18,4 +18,7 @@ router.post("/signup", main_controller.user_sign_up_post);
 router.get("/signin", main_controller.user_sign_in_get);
 router.post("/signin", main_controller.user_sign_in_post);
 
+router.get("/user/:id/membership", main_controller.user_membership_get);
+router.post("/user/:id/membership", main_controller.user_membership_post);
+
 module.exports = router;

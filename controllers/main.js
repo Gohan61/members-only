@@ -39,7 +39,7 @@ exports.user_sign_up_post = [
             first_name: req.body.firstName,
             last_name: req.body.lastName,
             username: req.body.username,
-            membership_status: true,
+            membership_status: false,
             password: hashedPassword,
           });
           const result = await user.save();
@@ -69,5 +69,36 @@ exports.user_sign_in_post = [
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",
+  }),
+];
+
+exports.user_membership_get = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id).exec();
+
+  if (user === null) {
+    const err = new Error("User not found");
+    err.status = 404;
+    return next(err);
+  } else {
+    res.render("membership");
+  }
+});
+
+exports.user_membership_post = [
+  body("secretPassword").trim().escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id).exec();
+
+    const passwordInput = req.body.secretPassword;
+
+    if (user === null || passwordInput !== "elite") {
+      const err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    } else {
+      await User.findByIdAndUpdate(req.params.id, { membership_status: true });
+      res.redirect("/");
+    }
   }),
 ];
