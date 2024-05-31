@@ -2,6 +2,7 @@ const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 exports.user_sign_up_get = (req, res, next) => {
   res.render("signup");
@@ -16,7 +17,7 @@ exports.user_sign_up_post = [
     .trim()
     .isLength({ min: 2 })
     .escape(),
-  body("userName", "Username must be at least 5 characters")
+  body("username", "Username must be at least 5 characters")
     .trim()
     .isLength({ min: 5 })
     .escape(),
@@ -24,6 +25,9 @@ exports.user_sign_up_post = [
     .trim()
     .isLength({ min: 10 })
     .escape(),
+  body("confirmPassword").escape((value, { req }) => {
+    return value === req.body.password;
+  }),
 
   asyncHandler(async (req, res, next) => {
     try {
@@ -34,7 +38,7 @@ exports.user_sign_up_post = [
           const user = new User({
             first_name: req.body.firstName,
             last_name: req.body.lastName,
-            username: req.body.userName,
+            username: req.body.username,
             membership_status: true,
             password: hashedPassword,
           });
@@ -45,5 +49,25 @@ exports.user_sign_up_post = [
     } catch (err) {
       return next(err);
     }
+  }),
+];
+
+exports.user_sign_in_get = (req, res, next) => {
+  res.render("signin");
+};
+
+exports.user_sign_in_post = [
+  body("userName", "Username must be at least 5 characters")
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body("password", "Password must be at least 10 characters")
+    .trim()
+    .isLength({ min: 10 })
+    .escape(),
+
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/",
   }),
 ];
