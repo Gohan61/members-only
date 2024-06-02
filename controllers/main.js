@@ -1,8 +1,24 @@
 const User = require("../models/user");
+const Message = require("../models/message");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const user = require("../models/user");
+
+exports.home_get = asyncHandler(async (req, res, next) => {
+  const allMessages = await Message.find({}).exec();
+  if (user.req) {
+    const user = await User.findById(req.user.id, "membership").exec();
+  }
+
+  res.render("index", {
+    title: "Welcome to Private",
+    user: req.user,
+    messages: allMessages,
+    userMembership: user.membership_status,
+  });
+});
 
 exports.user_sign_up_get = (req, res, next) => {
   res.render("signup");
@@ -99,6 +115,38 @@ exports.user_membership_post = [
     } else {
       await User.findByIdAndUpdate(req.params.id, { membership_status: true });
       res.redirect("/");
+    }
+  }),
+];
+
+exports.user_createMessage_get = (req, res, next) => {
+  res.render("createMessage");
+};
+
+exports.user_createMessage_post = [
+  body("title").trim().isLength({ min: 2 }).escape(),
+  body("timestamp").trim().escape(),
+  body("message").trim().isLength({ min: 5 }).escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    // const user = await User.findById(req.params.id)
+
+    const message = new Message({
+      title: req.body.title,
+      timestamp: req.body.timestamp,
+      text: req.body.message,
+      userID: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("createMessage", {
+        errors: errors.array(),
+        message: message,
+      });
+    } else {
+      await message.save();
+      res.redirect(message.url);
     }
   }),
 ];
