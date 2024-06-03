@@ -10,7 +10,10 @@ exports.home_get = asyncHandler(async (req, res, next) => {
   const allMessages = await Message.find({}).exec();
   let userDB = undefined;
   if (req.user) {
-    userDB = await User.findById(req.user.id, "membership_status admin").exec();
+    userDB = await User.findById(
+      req.user.id,
+      "membership_status admin first_name last_name"
+    ).exec();
   }
 
   res.render("index", {
@@ -19,6 +22,8 @@ exports.home_get = asyncHandler(async (req, res, next) => {
     messages: allMessages,
     userMembership: userDB ? userDB.membership_status : undefined,
     admin: userDB ? userDB.admin : undefined,
+    first_name: userDB ? userDB.first_name : undefined,
+    last_name: userDB ? userDB.last_name : undefined,
   });
 });
 
