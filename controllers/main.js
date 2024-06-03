@@ -8,15 +8,16 @@ const user = require("../models/user");
 
 exports.home_get = asyncHandler(async (req, res, next) => {
   const allMessages = await Message.find({}).exec();
-  if (user.req) {
-    const user = await User.findById(req.user.id, "membership").exec();
+  let userDB = undefined;
+  if (req.user) {
+    userDB = await User.findById(req.user.id, "membership_status").exec();
   }
 
   res.render("index", {
     title: "Welcome to Private",
     user: req.user,
     messages: allMessages,
-    userMembership: user.membership_status,
+    userMembership: userDB ? userDB.membership_status : undefined,
   });
 });
 
@@ -150,3 +151,12 @@ exports.user_createMessage_post = [
     }
   }),
 ];
+
+exports.logout_get = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+};
