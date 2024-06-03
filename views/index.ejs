@@ -9,24 +9,24 @@
     <p>Welcome to <%= title %></p>
     <% if (user) {%>
     <h2>Welcome back <%= user.userName %></h2>
+    <a href="/logout">Log out</a>
     <%} else { %>
     <h2>Please log in</h2>
+    <a href="/signin">Sign in</a>
     <% } %>
     <a href="/signup">Sign up</a>
-    <a href="/signin">Sign in</a>
     <% if (user) { %>
     <a href="<%= user.url %>/membership">Become a member</a>
     <a href="<%= user.url %>/create-message">Create a new message</a>
-    <% } %>
     <h3>Message board</h3>
     <% for (const message of messages) { %>
     <div class="message">
-      <% if (user && userMembership) { %>
+      <% if (userMembership) { %>
       <h4>Title: <span><%= message.title %></span></h4>
       <p class="timestamp"><%= message.timestamp %></p>
       <% } %>
       <p class="messageContent"><%= message.text %></p>
-      <% } %>
+      <% } %> <% } %>
     </div>
   </body>
 </html>
