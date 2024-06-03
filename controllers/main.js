@@ -91,33 +91,17 @@ exports.user_sign_up_post = [
 ];
 
 exports.user_sign_in_get = (req, res, next) => {
-  res.render("signin", { errors: undefined });
+  res.render("signin", { errors: undefined, username: undefined });
 };
 
 exports.user_sign_in_post = [
-  body("userName", "Username must be at least 5 characters")
-    .trim()
-    .isLength({ min: 5 })
-    .escape(),
-  body("password", "Password must be at least 10 characters")
-    .trim()
-    .isLength({ min: 10 })
-    .escape(),
-  (req, res, next) => {
-    const errors = validationResult(req);
+  body("userName").trim().escape(),
+  body("password").trim().escape(),
 
-    if (!errors.isEmpty()) {
-      res.render("signin", {
-        errors: errors.array(),
-        username: req.body.username,
-      });
-    } else {
-      passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/",
-      });
-    }
-  },
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/",
+  }),
 ];
 
 exports.user_membership_get = asyncHandler(async (req, res, next) => {
