@@ -24,8 +24,9 @@
     <h3>Message board</h3>
     <% for (const message of messages) { %>
     <div class="message">
-      <% if (userMembership) { %>
       <h4>Title: <span><%= message.title %></span></h4>
+      <% if (userMembership) { %>
+      <p class="name"><%= first_name %> <%= last_name %></p>
       <p class="timestamp"><%= message.timestamp.toLocaleString() %></p>
       <% } %>
       <p class="messageContent"><%= message.text %></p>
