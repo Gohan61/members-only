@@ -60,6 +60,11 @@ form button {
   width: 100px;
 }
 
+.name {
+  font-size: 1.1em;
+  font-style: italic;
+}
+
 .home {
   margin-top: 40px;
 }
