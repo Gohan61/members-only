@@ -17,6 +17,7 @@
     <a href="/signup">Sign up</a>
     <% if (user) { %>
     <a href="<%= user.url %>/membership">Become a member</a>
+    <a href="<%= user.url %>/admin">Become an admin</a>
     <a href="<%= user.url %>/create-message">Create a new message</a>
     <h3>Message board</h3>
     <% for (const message of messages) { %>

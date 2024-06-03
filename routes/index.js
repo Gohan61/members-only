@@ -14,6 +14,9 @@ router.post("/signin", main_controller.user_sign_in_post);
 
 router.get("/logout", main_controller.logout_get);
 
+router.get("/user/:id/admin", main_controller.user_admin_get);
+router.post("/user/:id/admin", main_controller.user_admin_post);
+
 router.get("/user/:id/membership", main_controller.user_membership_get);
 router.post("/user/:id/membership", main_controller.user_membership_post);
 

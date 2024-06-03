@@ -160,3 +160,27 @@ exports.logout_get = (req, res, next) => {
     res.redirect("/");
   });
 };
+
+exports.user_admin_get = (req, res, next) => {
+  res.render("admin", { errors: undefined, wrongPassword: undefined });
+};
+
+exports.user_admin_post = [
+  body("adminPassword", "Wrong password").trim().escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const adminPassword = req.body.adminPassword;
+
+    if (!errors.isEmpty() || adminPassword !== process.env.ADMIN_PASSWORD) {
+      res.render("admin", {
+        errors: errors.array(),
+        wrongPassword: "You entered a wrong password",
+      });
+    } else {
+      await User.findByIdAndUpdate(req.params.id, { admin: true });
+      res.redirect("/");
+    }
+  }),
+];
