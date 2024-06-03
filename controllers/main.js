@@ -136,20 +136,26 @@ exports.user_membership_post = [
 ];
 
 exports.user_createMessage_get = (req, res, next) => {
-  res.render("createMessage");
+  res.render("createMessage", { errors: undefined, message: undefined });
 };
 
 exports.user_createMessage_post = [
-  body("title").trim().isLength({ min: 2 }).escape(),
+  body("title", "Title must be at least two characters long")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
   body("timestamp").trim().escape(),
-  body("message").trim().isLength({ min: 5 }).escape(),
+  body("message", "Message must be at least 5 characters long")
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
     const message = new Message({
       title: req.body.title,
-      timestamp: req.body.timestamp,
+      timestamp: Date.now(),
       text: req.body.message,
       userID: req.params.id,
     });
