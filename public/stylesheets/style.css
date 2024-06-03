@@ -43,3 +43,23 @@ a {
 .messageContent {
   font-size: 1.1em;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 400px;
+}
+
+form label {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+form button {
+  width: 100px;
+}
+
+.home {
+  margin-top: 40px;
+}
