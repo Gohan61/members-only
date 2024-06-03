@@ -91,7 +91,7 @@ exports.user_sign_up_post = [
 ];
 
 exports.user_sign_in_get = (req, res, next) => {
-  res.render("signin");
+  res.render("signin", { errors: undefined });
 };
 
 exports.user_sign_in_post = [
@@ -103,11 +103,21 @@ exports.user_sign_in_post = [
     .trim()
     .isLength({ min: 10 })
     .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
 
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/",
-  }),
+    if (!errors.isEmpty()) {
+      res.render("signin", {
+        errors: errors.array(),
+        username: req.body.username,
+      });
+    } else {
+      passport.authenticate("local", {
+        successRedirect: "/",
+        failureRedirect: "/",
+      });
+    }
+  },
 ];
 
 exports.user_membership_get = asyncHandler(async (req, res, next) => {
