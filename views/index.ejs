@@ -15,9 +15,10 @@
     <% } %>
     <a href="/signup">Sign up</a>
     <% if (user) { %>
-    <a href="<%= user.url %>/membership">Become a member</a>
     <a href="<%= user.url %>/create-message">Create a new message</a>
-    <% if (!admin) { %>
+    <% if (!userMembership) { %>
+    <a href="<%= user.url %>/membership">Become a member</a>
+    <% } %> <% if (!admin) { %>
     <a href="<%= user.url %>/admin">Become an admin</a>
     <% } %> <% } %>
     <h3>Message board</h3>
