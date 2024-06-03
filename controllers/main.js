@@ -10,7 +10,7 @@ exports.home_get = asyncHandler(async (req, res, next) => {
   const allMessages = await Message.find({}).exec();
   let userDB = undefined;
   if (req.user) {
-    userDB = await User.findById(req.user.id, "membership_status").exec();
+    userDB = await User.findById(req.user.id, "membership_status admin").exec();
   }
 
   res.render("index", {
@@ -18,7 +18,21 @@ exports.home_get = asyncHandler(async (req, res, next) => {
     user: req.user,
     messages: allMessages,
     userMembership: userDB ? userDB.membership_status : undefined,
+    admin: userDB ? userDB.admin : undefined,
   });
+});
+
+exports.home_post = asyncHandler(async (req, res, next) => {
+  const message = Message.findById(req.body.messageID);
+
+  if (message === null) {
+    const err = new Error("Message not found");
+    err.status = 404;
+    return next(err);
+  } else {
+    await Message.findByIdAndDelete(req.body.messageID);
+    res.redirect("/");
+  }
 });
 
 exports.user_sign_up_get = (req, res, next) => {
@@ -131,7 +145,6 @@ exports.user_createMessage_post = [
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
-    // const user = await User.findById(req.params.id)
 
     const message = new Message({
       title: req.body.title,
@@ -147,7 +160,7 @@ exports.user_createMessage_post = [
       });
     } else {
       await message.save();
-      res.redirect(message.url);
+      res.redirect("/");
     }
   }),
 ];

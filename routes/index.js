@@ -5,6 +5,7 @@ const main_controller = require("../controllers/main");
 
 /* GET home page. */
 router.get("/", main_controller.home_get);
+router.post("/", main_controller.home_post);
 
 router.get("/signup", main_controller.user_sign_up_get);
 router.post("/signup", main_controller.user_sign_up_post);

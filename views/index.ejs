@@ -27,7 +27,12 @@
       <p class="timestamp"><%= message.timestamp %></p>
       <% } %>
       <p class="messageContent"><%= message.text %></p>
-      <% } %> <% } %>
+      <% if (admin) { %>
+      <form action="" method="post">
+        <input type="hidden" name="messageID" value="<%= message._id %>" />
+        <button type="submit">Delete message</button>
+      </form>
+      <% } %> <% } %><% } %>
     </div>
   </body>
 </html>
