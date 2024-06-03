@@ -25,7 +25,7 @@
     <div class="message">
       <% if (userMembership) { %>
       <h4>Title: <span><%= message.title %></span></h4>
-      <p class="timestamp"><%= message.timestamp %></p>
+      <p class="timestamp"><%= message.timestamp.toLocaleString() %></p>
       <% } %>
       <p class="messageContent"><%= message.text %></p>
       <% if (admin) { %>
