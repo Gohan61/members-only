@@ -36,7 +36,7 @@ exports.home_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.user_sign_up_get = (req, res, next) => {
-  res.render("signup", { errors: undefined });
+  res.render("signup", { errors: undefined, user: undefined });
 };
 
 exports.user_sign_up_post = [
@@ -63,31 +63,29 @@ exports.user_sign_up_post = [
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      res.render("signup", {
-        errors: errors.array(),
-      });
-      return;
-    } else {
-      try {
-        bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-          if (err) {
-            throw new Error("Error");
-          } else {
-            const user = new User({
-              first_name: req.body.firstName,
-              last_name: req.body.lastName,
-              username: req.body.username,
-              membership_status: false,
-              password: hashedPassword,
-            });
-            const result = await user.save();
-            res.redirect("/");
-          }
+    try {
+      bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+        const user = new User({
+          first_name: req.body.firstName,
+          last_name: req.body.lastName,
+          username: req.body.username,
+          membership_status: false,
+          password: hashedPassword,
         });
-      } catch (err) {
-        return next(err);
-      }
+        if (!errors.isEmpty()) {
+          res.render("signup", {
+            errors: errors.array(),
+            user: user,
+          });
+        } else if (err) {
+          throw new Error("Error");
+        } else {
+          const result = await user.save();
+          res.redirect("/");
+        }
+      });
+    } catch (err) {
+      return next(err);
     }
   }),
 ];
