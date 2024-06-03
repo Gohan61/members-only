@@ -36,7 +36,7 @@ exports.home_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.user_sign_up_get = (req, res, next) => {
-  res.render("signup");
+  res.render("signup", { errors: undefined });
 };
 
 exports.user_sign_up_post = [
@@ -61,24 +61,33 @@ exports.user_sign_up_post = [
   }),
 
   asyncHandler(async (req, res, next) => {
-    try {
-      bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-        if (err) {
-          throw new Error("Error");
-        } else {
-          const user = new User({
-            first_name: req.body.firstName,
-            last_name: req.body.lastName,
-            username: req.body.username,
-            membership_status: false,
-            password: hashedPassword,
-          });
-          const result = await user.save();
-          res.redirect("/");
-        }
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("signup", {
+        errors: errors.array(),
       });
-    } catch (err) {
-      return next(err);
+      return;
+    } else {
+      try {
+        bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+          if (err) {
+            throw new Error("Error");
+          } else {
+            const user = new User({
+              first_name: req.body.firstName,
+              last_name: req.body.lastName,
+              username: req.body.username,
+              membership_status: false,
+              password: hashedPassword,
+            });
+            const result = await user.save();
+            res.redirect("/");
+          }
+        });
+      } catch (err) {
+        return next(err);
+      }
     }
   }),
 ];

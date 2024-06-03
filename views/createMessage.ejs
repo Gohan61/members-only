@@ -17,5 +17,12 @@
       <input type="text" name="message" id="message" />
       <button type="submit">Submit</button>
     </form>
+
+    <% if (errors) { %>
+    <ul>
+      <% for (const error of errors) { %>
+      <li><%= error.msg %></li>
+      <% } %><% } %>
+    </ul>
   </body>
 </html>

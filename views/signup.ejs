@@ -21,5 +21,12 @@
       <input type="password" id="confirmPassword" name="confirmPassword" />
       <button type="submit">Sign up</button>
     </form>
+
+    <% if (errors) { %>
+    <ul>
+      <% for (const error of errors) { %>
+      <li><%= error.msg %></li>
+      <% } %><% } %>
+    </ul>
   </body>
 </html>
