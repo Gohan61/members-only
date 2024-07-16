@@ -1,5 +1,13 @@
-<h1>A members only message board app</h1>
+# Message board
 
-This app uses passportJS to authenticate users.
+This project uses EJS as a templating language for the frontend and Express, NodeJS and MongoDB for the backend. Project is using Passport.js with a local strategy to authenticate users.
 
-Access this <a href="https://members-only-odin.adaptable.app/">Members-only app</a>
+## The Odin Project: Lesson Members Only
+
+This project is build according to the specification of the [Members Only lesson](https://www.theodinproject.com/lessons/nodejs-members-only)
+
+## Live website
+
+Access the <a href="https://members-only-odin.adaptable.app/">Members-only app</a>
+
+![Message board](./members-only-display.png "Messages on the message board")
