@@ -6,8 +6,6 @@ This project uses EJS as a templating language for the frontend and Express, Nod
 
 This project is build according to the specification of the [Members Only lesson](https://www.theodinproject.com/lessons/nodejs-members-only)
 
-## Live website
-
-Access the <a href="https://members-only-odin.adaptable.app/">Members-only app</a>
+## Preview
 
 ![Message board](./members-only-display.png "Messages on the message board")
